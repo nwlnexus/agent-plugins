@@ -22,6 +22,8 @@ ls CLAUDE.md AGENTS.md; grep -c 'gitnexus:start' CLAUDE.md AGENTS.md 2>/dev/null
 ls package.json Makefile justfile 2>/dev/null
 ```
 
+**Fresh clone first:** if there is no `.gitnexus/` yet and the repo uses a plain hooks directory, `git config core.hooksPath` is empty until the repo's setup step runs, so the refresh hooks are silent. Run that setup step (e.g. `git config core.hooksPath .githooks`) before any indexing, then bootstrap with `--index-only`. Never follow the managed section's own bootstrap hint, which is a bare `analyze`.
+
 Decide: **hook manager** (husky → lefthook → pre-commit → plain), **where repo-local scripts live** (`scripts/`, `tools/`, `bin/`… match the repo), **how the repo exposes commands** (`package.json` scripts, `Makefile`, `justfile`, or none → document the raw command).
 
 ## Step 1 — install the refresh script
