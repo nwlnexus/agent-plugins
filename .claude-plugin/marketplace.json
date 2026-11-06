@@ -1,0 +1,14 @@
+{
+  "name": "nwlnexus",
+  "owner": { "name": "nwlnexus" },
+  "metadata": {
+    "description": "Public Claude Code plugins from nwlnexus: the agent session harness (long-task, claim-verifier, session contract, hooks) and repo-agnostic skills."
+  },
+  "plugins": [
+    {
+      "name": "agent-harness",
+      "source": "./",
+      "description": "Session harness: long-task and gitnexus-no-churn skills, the claim-verifier agent, the session contract injected at session start, and the progress-stale and permission-denied-log hooks."
+    }
+  ]
+}

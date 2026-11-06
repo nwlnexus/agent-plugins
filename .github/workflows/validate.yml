@@ -17,6 +17,14 @@ jobs:
         run: sudo apt-get update -q && sudo apt-get install -y -q shellcheck python3-yaml
       - name: Validate skills, agents, fragments and templates
         run: sh scripts/validate-skills.sh
+      - name: Validate the plugin and marketplace (claude plugin validate --strict)
+        run: |
+          npm install -g @anthropic-ai/claude-code >/dev/null
+          claude plugin validate . --strict
+      - name: Session-contract hook emits SessionStart context
+        run: |
+          echo '{}' | CLAUDE_PLUGIN_ROOT="$PWD" sh hooks/session-contract.sh \
+            | jq -e '.hookSpecificOutput.hookEventName == "SessionStart" and (.hookSpecificOutput.additionalContext | startswith("## Session contract"))'
       - name: markdownlint
         uses: DavidAnson/markdownlint-cli2-action@v22
         with:

@@ -9,6 +9,20 @@ It also holds the **session harness** every Claude session on the owner's hosts 
 `CLAUDE.md`, and the progress-file template (design: `nwlnexus/olympus-sdk`
 `docs/superpowers/specs/2026-10-26-agent-harness-knowledge-and-hosts-design.md`, decisions H1 to H5).
 
+## Install as a plugin
+
+This repo is the `nwlnexus` Claude Code plugin marketplace. It currently serves one plugin, `agent-harness`,
+which contains everything below. The session contract is injected by a `SessionStart` hook, because a
+`CLAUDE.md` inside a plugin is not loaded.
+
+```text
+/plugin marketplace add nwlnexus/agent-plugins
+/plugin install agent-harness@nwlnexus
+```
+
+Hosts still on nix-darwin-hm get the same pieces through the `agent-skills` flake input until they move to the
+plugin (nwlnexus/olympus-sdk#748, PL5). Don't enable both on one host: the hooks would run twice.
+
 ## Skills
 
 | Skill | Use it when |
@@ -28,6 +42,7 @@ It also holds the **session harness** every Claude session on the owner's hosts 
 | --- | --- |
 | [`fragments/session-contract.md`](fragments/session-contract.md) | The session contract (progress file, goal, verify-before-done, effort, registry, parallelism, naming, cross-session messages). Nix appends its body, without the frontmatter, to each Claude dir's global `CLAUDE.md` between managed markers. |
 | [`templates/progress.md`](templates/progress.md) | The progress-file template `long-task` copies (`skills/long-task/progress-template.md` links to it). Sections: Goal, Done-when checks, Plan, Evidence log, Decisions, Blocked-on, Next. |
+| [`hooks/session-contract.sh`](hooks/session-contract.sh) | SessionStart hook of the `agent-harness` plugin (POSIX sh, tests in `tests/session-contract.sh`). Prints the body of `fragments/session-contract.md`, frontmatter stripped, as SessionStart `additionalContext`, because a `CLAUDE.md` inside a plugin is not loaded. Prints nothing if the fragment or `jq` is missing. Always exits 0. Wired in `hooks/hooks.json` together with the other two hooks. |
 | [`hooks/progress-stale.sh`](hooks/progress-stale.sh) | Stop hook (POSIX sh, tests in `tests/progress-stale.sh`). Reads the hook JSON on stdin; when the work tree has a `docs/progress/*.md` file older than 20 minutes it prints `progress file <path> last updated <n> minutes ago`, otherwise nothing. Never prints a decision, always exits 0. Nix merges it into each Claude dir's `settings.json` as a `Stop` hook. |
 | [`hooks/permission-denied-log.sh`](hooks/permission-denied-log.sh) | PermissionDenied hook (POSIX sh, tests in `tests/permission-denied-log.sh`). Reads the hook JSON on stdin and appends one line `{ts, account, cwd, tool, tool_input, reason}` to `${XDG_STATE_HOME:-$HOME/.local/state}/agent/denials.jsonl` (directory 0700, file 0600); `account` is the basename of `$CLAUDE_CONFIG_DIR` or `default`. Never writes to stdout, always exits 0. nix-darwin-hm (`home/cli/claude/harness.nix`) links it into each Claude dir and wires it as a `PermissionDenied` hook, matcher `*` (olympus-sdk#576, H19 layer 3). The `long-task` skill reads the last line before reporting a blocked merge. |
 

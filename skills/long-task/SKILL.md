@@ -130,7 +130,8 @@ Record choices in **Decisions** and anything waiting on a person or another task
 
 ## Step 7: verify before any claim
 
-Call the `claim-verifier` agent (Agent tool, `subagent_type: claim-verifier`) with the progress file path, the
+Call the `claim-verifier` agent (Agent tool, `subagent_type: claim-verifier`, or `agent-harness:claim-verifier` when
+the harness is installed as the `agent-harness` plugin) with the progress file path, the
 claim, and the worktree path:
 
 - before any "done" or "verified" report to the owner, the issue or another session;
