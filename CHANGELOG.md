@@ -6,6 +6,10 @@
 2. Merge the PR, then on updated `main`: `claude plugin tag --push`
    (creates and pushes `agent-harness--v<version>`; use `--dry-run` first).
 
+## 0.1.1
+
+- Session contract: memory ownership rule (three stores, one owner each, one-way proposals into the wiki inbox).
+
 ## 0.1.0
 
 - First release of the `agent-harness` plugin.
