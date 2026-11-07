@@ -1,7 +1,7 @@
 {
   "name": "agent-harness",
   "displayName": "Agent harness",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Session harness for Claude Code: long-task and gitnexus-no-churn skills, the claim-verifier agent, the session contract injected at session start, and the progress-stale and permission-denied-log hooks.",
   "author": { "name": "nwlnexus", "url": "https://github.com/nwlnexus" },
   "repository": "https://github.com/nwlnexus/agent-plugins",
