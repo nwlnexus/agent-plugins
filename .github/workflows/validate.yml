@@ -12,7 +12,7 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
       - name: Install shellcheck and PyYAML
         run: sudo apt-get update -q && sudo apt-get install -y -q shellcheck python3-yaml
       - name: Validate skills, agents, fragments and templates
@@ -26,6 +26,6 @@ jobs:
           echo '{}' | CLAUDE_PLUGIN_ROOT="$PWD" sh hooks/session-contract.sh \
             | jq -e '.hookSpecificOutput.hookEventName == "SessionStart" and (.hookSpecificOutput.additionalContext | startswith("## Session contract"))'
       - name: markdownlint
-        uses: DavidAnson/markdownlint-cli2-action@v22
+        uses: DavidAnson/markdownlint-cli2-action@07035fd053f7be764496c0f8d8f9f41f98305101 # v22.0.0
         with:
           globs: '**/*.md'

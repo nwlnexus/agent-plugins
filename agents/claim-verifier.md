@@ -47,6 +47,22 @@ If any of the three is missing or the progress file cannot be read, return `FAIL
    ("deployed" when only CI ran) fails.
 5. Spot-check the Evidence log: re-run at least the last two logged commands that are safe to repeat and
    compare the key output line.
+6. **Change-impact evidence (indexed repos).** When the claim covers a code change (files other than docs,
+   Markdown and the progress file) and the repo has a GitNexus index (`.gitnexus/` in the worktree or the main
+   checkout, or `gitnexus list` names the repo):
+   - The Evidence log must hold a `detect_changes` row (MCP tool or `gitnexus detect-changes` CLI) with its scope,
+     changed symbols and risk level. No such row: the check is `FAIL` ("no detect_changes evidence").
+   - Its scope must match the diff under review: list the changed files with `git diff --name-only
+     origin/main...HEAD` (or the claimed range) and confirm every changed code file is covered by the row's
+     symbols or files. Where the CLI is installed, re-run `gitnexus detect-changes --scope compare --base-ref
+     origin/main` (read-only) and compare. Code files in the diff that the row does not cover: `FAIL`
+     ("detect_changes scope does not match the diff").
+   - Risk HIGH or CRITICAL (in the row, or in your re-run) needs a Decisions line or a later Evidence row saying
+     how it was addressed (tests on the d=1 dependents, a split, an accepted risk with a reason). Unaddressed:
+     `FAIL`.
+   - The Plan should carry a `Blast radius` section built from `impact`; a missing section is a NOTE, not a FAIL.
+   Report this as its own line under CHECKS (`[PASS|FAIL] detect_changes ...`). A repo with no index, or a claim
+   with no code change, gets `[PASS] detect_changes not required (<reason>)`.
 
 ## Rules
 

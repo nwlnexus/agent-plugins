@@ -117,14 +117,32 @@ bulk or tests to a clear spec; haiku for lookups and lint; fable only where the 
 
 Agent teams only where the repo has opted in and the session is the interactive tmux substrate.
 
+**Blast radius.** When the repo has a [GitNexus](https://github.com/abhigyanpatwari/GitNexus) index (a `.gitnexus/`
+directory in the work tree or the main checkout, or the gitnexus MCP `list_repos` lists the repo), the Plan carries
+a **Blast radius** section above the table. Build it with `impact` (`direction: "upstream"`, `maxDepth` 2 or more)
+for each symbol or file the plan changes, or run the `gitnexus-plan` skill, which produces the same analysis. List
+per target:
+
+- the d=1 dependents (these break when the change is wrong);
+- the affected processes (execution flows);
+- the risk level `impact` reports (LOW, MEDIUM, HIGH, CRITICAL).
+
+Call out any HIGH or CRITICAL target before work starts: name it in the planning reply and in Decisions, with how
+the plan contains it (tests that cover the d=1 dependents, a smaller step, a split PR). Add a target to the section
+when the plan grows. With no index, write one line instead: `Blast radius: no index (<reason>)`.
+
 ## Step 6: work loop
 
 For each Plan step:
 
 1. Mark it `doing`, do it, run its check.
 2. Append an Evidence log row: command, exit code, the key output line copied verbatim, the commit.
-3. Commit the change and the progress file together; push.
-4. Update **Next** before any pause, long wait or likely compaction, so a fresh session can start from the file.
+3. In an indexed repo, before committing a code change, run `detect_changes` (scope `staged`, or `compare` against
+   `origin/main` for the whole branch) and log it as an Evidence row: the scope, the changed symbols and the risk
+   level. HIGH or CRITICAL needs a Decisions line saying how it is addressed. The claim-verifier fails a code
+   change without this row, and the `detect-changes-reminder` hook warns at `git commit` when none ran.
+4. Commit the change and the progress file together; push.
+5. Update **Next** before any pause, long wait or likely compaction, so a fresh session can start from the file.
 
 Record choices in **Decisions** and anything waiting on a person or another task in **Blocked-on**.
 
