@@ -8,7 +8,7 @@
 #   fragments/<name>.md     frontmatter `name` (== file name), `description`, `target`; the body (what nix
 #                           appends to CLAUDE.md) starts with a `## ` heading, has no `# ` heading outside code
 #                           fences and never contains the managed-block markers.
-#   templates/progress.md   has every section the long-task skill relies on.
+#   templates/progress.md   has every section the long-task skill relies on (including ### Blast radius).
 #   hooks/<name>.sh         passes `sh -n` and shellcheck (when installed), is executable, has a row in
 #                           README.md, and its test tests/<name>.sh (required) passes.
 # Every frontmatter block must parse as a YAML mapping (checked with python3 + PyYAML when available, so a
@@ -158,6 +158,7 @@ if [ -f "$tpl" ]; then
   for section in "Goal" "Done-when checks" "Plan" "Evidence log" "Decisions" "Blocked-on" "Next"; do
     grep -qx "## $section" "$tpl" || err "template progress: missing section '## $section'"
   done
+  grep -qx "### Blast radius" "$tpl" || err "template progress: missing '### Blast radius' under ## Plan"
   ok "template progress"
 else
   err "templates/progress.md is missing (the long-task skill copies it)"
