@@ -11,6 +11,12 @@
         "hooks": [{ "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/progress-stale.sh", "timeout": 5 }]
       }
     ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [{ "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/detect-changes-reminder.sh", "timeout": 5 }]
+      }
+    ],
     "PermissionDenied": [
       {
         "matcher": "*",
