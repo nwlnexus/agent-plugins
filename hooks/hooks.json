@@ -6,6 +6,11 @@
         "hooks": [{ "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/session-contract.sh", "timeout": 5 }]
       }
     ],
+    "SubagentStart": [
+      {
+        "hooks": [{ "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/session-contract.sh SubagentStart", "timeout": 5 }]
+      }
+    ],
     "Stop": [
       {
         "hooks": [{ "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/progress-stale.sh", "timeout": 5 }]
