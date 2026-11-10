@@ -6,6 +6,13 @@
 2. Merge the PR, then on updated `main`: `claude plugin tag --push`
    (creates and pushes `agent-harness--v<version>`; use `--dry-run` first).
 
+## 0.3.0
+
+- Session contract: also injected into every subagent by a new `SubagentStart` hook (no matcher, so all agent
+  types). `hooks/session-contract.sh` takes the event name as its first argument and sets `hookEventName` to
+  `SubagentStart` or `SessionStart`; the SessionStart output is unchanged. Costs about 3.5 KB of context
+  (roughly 900 tokens) per subagent start.
+
 ## 0.2.0
 
 - `long-task`: the Plan carries a **Blast radius** section in repos with a GitNexus index (`impact` upstream,

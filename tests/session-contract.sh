@@ -1,5 +1,6 @@
 #!/bin/sh
-# Behaviour tests for hooks/session-contract.sh (the SessionStart hook that injects the session contract).
+# Behaviour tests for hooks/session-contract.sh (the SessionStart and SubagentStart hook that injects the
+# session contract).
 #   sh tests/session-contract.sh      (needs jq; run by scripts/validate-skills.sh)
 set -u
 here=$(cd "$(dirname "$0")" && pwd)
@@ -31,6 +32,18 @@ check "frontmatter is stripped" no_frontmatter
 body_lines=$(grep -c '^## \|^- ' "$root/fragments/session-contract.md")
 ctx_lines=$(printf '%s\n' "$ctx" | grep -c '^## \|^- ')
 check "whole fragment body is injected" [ "$ctx_lines" -eq "$body_lines" ]
+
+session_ctx=$ctx
+out=$(echo '{"hook_event_name":"SubagentStart","agent_type":"Explore"}' | CLAUDE_PLUGIN_ROOT="$root" sh "$hook" SubagentStart)
+status=$?
+check "SubagentStart: exits 0" [ "$status" -eq 0 ]
+is_subagent_start() { printf %s "$out" | jq -e '.hookSpecificOutput.hookEventName == "SubagentStart"' >/dev/null; }
+check "SubagentStart: emits SubagentStart hookSpecificOutput" is_subagent_start
+ctx=$(printf %s "$out" | jq -r '.hookSpecificOutput.additionalContext')
+check "SubagentStart: same context as SessionStart" [ "$ctx" = "$session_ctx" ]
+
+out=$(echo '{}' | CLAUDE_PLUGIN_ROOT="$root" sh "$hook" Bogus)
+check "unknown event argument: falls back to SessionStart" is_session_start
 
 mkdir -p "$tmp/empty"
 out=$(echo '{}' | CLAUDE_PLUGIN_ROOT="$tmp/empty" sh "$hook")

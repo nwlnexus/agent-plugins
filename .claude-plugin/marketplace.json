@@ -8,7 +8,7 @@
     {
       "name": "agent-harness",
       "source": "./",
-      "description": "Session harness: long-task and gitnexus-no-churn skills, the claim-verifier agent, the session contract injected at session start, and the progress-stale, permission-denied-log and detect-changes-reminder hooks."
+      "description": "Session harness: long-task and gitnexus-no-churn skills, the claim-verifier agent, the session contract injected at session and subagent start, and the progress-stale, permission-denied-log and detect-changes-reminder hooks."
     }
   ]
 }
