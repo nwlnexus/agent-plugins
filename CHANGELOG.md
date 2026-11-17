@@ -6,6 +6,15 @@
 2. Merge the PR, then on updated `main`: `claude plugin tag --push`
    (creates and pushes `agent-harness--v<version>`; use `--dry-run` first).
 
+## 0.4.0
+
+- New skill `batch-in-code`: fold many related, mechanical tool calls into one Bash script that prints a short,
+  bounded result, and put independent MCP, subagent and file calls in one message. It gets most of Code Mode's
+  benefit without Code Mode, which can't run with Remote Control or OpenTelemetry export on, under `-p` or in cloud
+  sessions. Outward and destructive steps (push, merge, deploy, delete, remote writes) stay separate tool calls so
+  permission rules, hooks and the auto-mode classifier review each one. Includes a dry-run and verify procedure for
+  bulk edits, and examples that were run before release.
+
 ## 0.3.0
 
 - Session contract: also injected into every subagent by a new `SubagentStart` hook (no matcher, so all agent

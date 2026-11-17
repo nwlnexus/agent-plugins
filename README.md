@@ -27,6 +27,7 @@ plugin (nwlnexus/olympus-sdk#748, PL5). Don't enable both on one host: the hooks
 
 | Skill | Use it when |
 | --- | --- |
+| [`batch-in-code`](skills/batch-in-code/SKILL.md) | A task needs many related, mechanical tool calls: the same edit across many files, a search to filter or count, a check repeated over a list, or independent commands that can run at once. One script returns a short, bounded result, and independent MCP or subagent calls go in one message. That gives most of [Code Mode](https://code.claude.com/docs/en/code-mode)'s benefit where Code Mode can't run (Remote Control, OpenTelemetry, `-p`). Push, merge, deploy, delete and remote writes stay separate calls so permission rules and the auto-mode classifier see them. |
 | [`gitnexus-no-churn`](skills/gitnexus-no-churn/SKILL.md) | Setting up or repairing [GitNexus](https://github.com/abhigyanpatwari/GitNexus) in a repo so it never reports "index N commits behind" after commits and never rewrites `CLAUDE.md`/`AGENTS.md`. Hooks keep the index at HEAD with `--index-only`; docs are generated once with `--no-stats`. |
 | [`long-task`](skills/long-task/SKILL.md) | A task expected to take more than about 30 minutes, or any issue with a "Done when". Registers the session in memory, keeps `docs/progress/<date>-<issue>-<slug>.md` on the branch (removed before merge), turns the Done-when into a `/goal`, delegates by tier, and calls `claim-verifier` before any "done", `gh pr ready` and merge. Planning runs at `effort: high`. |
 
